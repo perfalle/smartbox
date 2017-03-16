@@ -1,0 +1,17 @@
+[Unit]
+Description=Smartbox service {{ service_name }}
+[Service]
+Type=simple
+ExecStartPre=/bin/sh -c '/usr/bin/rkt prepare
+{%- for port in ports %}
+ --port={{port}}:{{ports[port]['direct_port']}}
+{%- endfor %}
+ $(head -1 "{{image_id_path}}")
+{%- for vol in volumes %}
+ --volume {{vol}},kind=host,source="{{volumes[vol]}}"
+{%- endfor %}
+  > "{{uuid_path}}"' 
+ExecStart=/bin/sh -c '/usr/bin/rkt run-prepared --net=default $(head -1 "{{uuid_path}}")'
+ExecStartPost=/bin/sh -c '/usr/bin/rkt gc --grace-period=0 || exec "echo pod gc failed"'
+Restart=always
+KillMode=mixed

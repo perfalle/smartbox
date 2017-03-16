@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="../static/main.css">
+<h1>Services</h1>
+<a href="/add">Add new Service</a>
+{% for service in services %}
+<hr/>
+<div class="{{ service.state }}">
+  <h3>{{ service.service_name }}</h3>
+  <div>{{ service.state }} ({{ service.sub_state }}) since {{ service.time }}</div>
+{% if not service.state == 'started' %}
+  <div><a href="/start/{{ service.url_service_name }}">Start now</a></div>
+{% else %}
+  <div><a href="/stop/{{ service.url_service_name }}">Stop now</a></div>
+{% endif %}
+  <a href="/service/{{service.url_service_name}}">More details</a>
+</div>
+<br/>
+
+{% endfor %}

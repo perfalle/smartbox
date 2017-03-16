@@ -1,0 +1,26 @@
+.service_notrunning {
+  background-color: #0000ff;
+}
+.service_running {
+  background-color: #0000ff;
+}
+
+.started {
+  background-color: #77ff77;
+}
+
+.stopped {
+  background-color: #ff7777;
+}
+
+.starting {
+  background-color: #aaffaa;
+}
+
+.stopping {
+  background-color: #ffaaaa;
+}
+
+.noimage {
+  background-color: #ff4444;
+}

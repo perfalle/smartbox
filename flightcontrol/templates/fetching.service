@@ -1,0 +1,7 @@
+[Unit]
+Description=Smartbox service {{ service_name }} fetch image
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c '/usr/bin/rkt fetch --insecure-options=image --full "{{image_source}}" > "{{image_id_path}}"'
+Restart=no
+KillMode=mixed
