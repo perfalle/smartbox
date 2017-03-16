@@ -26,6 +26,6 @@ Copy the following files to /home/smartbox:
 
 Remove all other files or directories.
 
-Run the run\_\*.sh_-scripts as root.
+Run the _run\_\*.sh_-scripts as root.
 
 _NOTE:_ It is not necessary to rebuild the containers unless the dependencies have changed. Just update the source files and restart the containers.
