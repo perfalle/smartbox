@@ -1,23 +1,25 @@
 # smartbox
-Moderne IT-Lösungen kommen heutzutage oft ohne Cloud nicht mehr aus.
-Das bringt ja auch viele Vorteile wie Plattformunabhängigkeit von webbasierten Diensten und der ständigen Verfügbarkeit der eigenen Daten.
+Cloud based services are ubiquitous today. 
+They are popular, because they offer many advatages to the user, like platform independence of web services and the availability of your own data from anywhere at any time.
 
-Dass man bei der Nutzung von Google- Facebook- oder Amazon-Diensten die Nutzungsrechte der eigenen Daten abtritt und zulässt, dass persönliche Informationen auf US-Servern verarbeitet werden, wird dabei einfach in Kauf genommen.
+However, by using centralized services e.g. offered by Google, Facebook, Amazon or Microsoft, your personal data is given to these companies.
 
-Einen Grund dafür könnte darin liegen, dass es so einfach ist diese Dienste zu nutzen.
-Dabei gibt es etliche Projekte die diese Dienste unter die eigene Kontrolle bringen könnten:
-* Owncloud für den Datenaustausch und den Onlinekalender
-* Ein XMPP Server als ersatz für einen zentralisierten Instant Messenger
-* Ein Mediaserver statt (oder zusätzlich zu) Netflix oder Spotify
-* Ein Gnusocial oder Diaspora Pod für die eigene Familie/Freunde
+In fact there are many (free software) projects that aim to bring cloud services under your control:
 
-Allen gemeinsam: Man muss einen Server mit diesen Diensten aufsetzen und administrieren.
-Das ist zwar kein Hexenwerk, dennoch für den Nicht-Nerd nicht zumutbar.
+* Owncloud as replacement for Dropbox or Google drive
+* An XMPP server as replacement for any centralized messaging system (e.g. WhatsApp, Telegram, Signal, Threema, ...)
+* A Mediacenter like Kodi as replacement (or in addition to) Netflix or Spotify
+* A Gnusocial or Diaspora pod as replacement for Twitter or Facebook
 
-Smartbox ist ein Versuch einen bewusst klein gehaltenen Anwendungsfall so einfach zu abstrahieren, dass keine IT-Kenntnisse nötig sind um es zu benutzen. Mit smartbox soll es möglich sein Dienste, wie die oben genannten zu installieren, ohne sich über weitere Konfiguration oder gegenseitige Störung mehrerer Dienste auf einem Server Gedanken machen zu müssen.
+The reason why so few people use these alternatives could be, that the user has to set up and administrate the server him-/herself.
+This is not feasible for most users.
 
-Der kleine Anwendungsfall bezieht sich in erster Linie auf die Skalierbarkeit von Diensten. Während es beim Einsatz von Containern im kommerziellen Bereich oft darum geht einen Dienst auf mehrere Rechner oder Rechenzentren zu verteilen und um diverse Probleme die das mitsich zieht, wird ein Dienst auf der Smartbox immer nur auf einem physikalischen Gerät laufen.
+Smartbox is supposed to be a solution here, as it will make it easy to run an own server at home with all sorts of services on it.
+It is based on the rkt container engine and will have some interesting features available via the web interface:
 
-Dennoch sollen Funktionen wie das automatische Einrichten eines dynDNS oder zeroconf Hostnames, das automatisierte Beziehen eines SSL Zertifikats (z.B: LetsEncrypt) sowie Backup-Strategien durch ein paar Klicks in der Weboberfläche möglich sein.
+* Install services from docker or rkt containers
+* Assign dynamic DNS or zeroconf hostnames to the services
+* Set up a SSL certificates for publicly available services
+* Automate backups (to a classic NAS, encrypted to Google drive or even to another Smartbox)
 
-Um das zu realisieren setzt smartbox auf die Container-Engine rkt, mit der es möglich ist sowohl appc images als auch docker images auszuführen.
+Check out the build directory to get build instructions.
