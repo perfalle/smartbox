@@ -1,0 +1,8 @@
+[Unit]
+Description=Smartbox webui
+[Service]
+Type=simple
+ExecStartPre=/bin/sh -c '/bin/mkdir -p /home/smartbox/com'
+ExecStart=/bin/sh -c '/usr/bin/rkt run --insecure-options=image --net=default --port=webuihttp:8080 --volume com,kind=host,source="/home/smartbox/com" --volume root,kind=host,source="/home/smartbox/webui" /home/smartbox/build/webui.aci'
+Restart=yes
+KillMode=mixed

@@ -39,6 +39,10 @@ def generate_running_unit(service_name, service_description):
                'uuid_path': uuid_path}
     return _get_template_environment().get_template('running.service').render(context)
 
+def generate_webui_unit():
+    """Generates the content of the unit file, that runs for the smartbox webui service."""
+    return _get_template_environment().get_template('webui.service').render({})
+
 def generate_reverse_proxy_site(service_name, service_description):
     """Generates the content of an Nginx site configuration (aka. service block),
     including hostname recognition, reverse proxy, SSL termination"""
