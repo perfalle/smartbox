@@ -15,10 +15,15 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 def restart_webui():
-    """Starts the webui service"""
+    """(Re)starts the webui service"""
     com.ensure_com_directories()
     content = templates.generate_webui_unit()
     systemd_services.restart(systemd_services.NAMESPACE_INTERNAL, "webui", content)
+
+def restart_apiservice():
+    """(Re)starts the rkt api-service"""
+    content = templates.generate_apiservice_unit()
+    systemd_services.restart(systemd_services.NAMESPACE_INTERNAL, "apiservice", content)
 
 def remove_service(service_name):
     """Stops the service and removes all files associated with it (including volumes)"""
@@ -160,12 +165,19 @@ class ComEventHandler(FileSystemEventHandler):
 
 def main():
     """Main method of smartbox flightcontrol"""
+    # create com directories if not present
     com.ensure_com_directories()
+
+    # start rkt api-service
+    restart_apiservice()
+    
     # check initial status of all installed services
     update_services()
 
     # prepare starting webui
     utils.ensure_directory(com.WEBUI_PATH)
+
+    # ensure that internal services are started
     restart_webui()
 
     # listen to com events

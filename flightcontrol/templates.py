@@ -40,8 +40,12 @@ def generate_running_unit(service_name, service_description):
     return _get_template_environment().get_template('running.service').render(context)
 
 def generate_webui_unit():
-    """Generates the content of the unit file, that runs for the smartbox webui service."""
+    """Generates the content of the unit file, that runs the smartbox webui service."""
     return _get_template_environment().get_template('webui.service').render({})
+
+def generate_apiservice_unit():
+    """Generates the content of the unit file, that runs rkt's api-service."""
+    return _get_template_environment().get_template('apiservice.service').render({})
 
 def generate_reverse_proxy_site(service_name, service_description):
     """Generates the content of an Nginx site configuration (aka. service block),

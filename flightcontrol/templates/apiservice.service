@@ -1,0 +1,7 @@
+[Unit]
+Description=Smartbox rkt api-service
+[Service]
+Type=simple
+ExecStart=/bin/sh -c 'rkt api-service'
+Restart=yes
+KillMode=mixed
