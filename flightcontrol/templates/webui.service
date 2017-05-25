@@ -2,7 +2,7 @@
 Description=Smartbox webui
 [Service]
 Type=simple
-ExecStartPre=/bin/sh -c '/bin/mkdir -p /home/smartbox/com'
-ExecStart=/bin/sh -c '/usr/bin/rkt run --insecure-options=image --net=default --port=webuihttp:8080 --volume com,kind=host,source="/home/smartbox/com" --volume root,kind=host,source="/home/smartbox/webui" /home/smartbox/build/webui.aci'
+ExecStartPre=/bin/sh -c '/bin/mkdir -p {{ com_directory }}'
+ExecStart=/bin/sh -c '/usr/bin/rkt run --insecure-options=image --net=default --port=webuihttp:8080 --volume com,kind=host,source="{{ com_directory }}" --volume root,kind=host,source="{{ webui_files_directory }}" {{ webui_aci_path }}'
 Restart=yes
 KillMode=mixed

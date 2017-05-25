@@ -41,7 +41,10 @@ def generate_running_unit(service_name, service_description):
 
 def generate_webui_unit():
     """Generates the content of the unit file, that runs the smartbox webui service."""
-    return _get_template_environment().get_template('webui.service').render({})
+    context = {'com_directory': com.COM_ROOT_PATH,
+               'webui_files_directory': '$SMARTBOX_HOME/webui', #TODO: find a place for path constant
+               'webui_aci_path': '$SMARTBOX_HOME/webui.aci'} #TODO: find a place for path constant
+    return _get_template_environment().get_template('webui.service').render(context)
 
 def generate_apiservice_unit():
     """Generates the content of the unit file, that runs rkt's api-service."""

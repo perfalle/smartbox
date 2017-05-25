@@ -5,7 +5,7 @@ import shutil
 import yaml
 import utils
 
-COM_ROOT_PATH = '/home/smartbox/com'
+COM_ROOT_PATH = '$SMARTBOX_HOME/com'
 
 WEBUI_PATH = os.path.join(COM_ROOT_PATH, 'webui')
 IMAGES_PATH = os.path.join(WEBUI_PATH, 'images')
