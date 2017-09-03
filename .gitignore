@@ -2,3 +2,4 @@
 *.aci
 local/
 *.directory
+*.vagrant

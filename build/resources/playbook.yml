@@ -1,0 +1,41 @@
+---
+- hosts: smartbox
+  vars:
+    smartbox_home: "/smartbox"
+  remote_user: root
+  tasks:
+  - name: Install git
+    yum:
+      name: git
+      state: present
+  - name: Install go
+    yum:
+      name: golang
+      state: present
+  - name: Install acbuild
+    script: install_acbuild.sh
+    args:
+      creates: "~/acbuild"
+  - name: Copy ressources
+    copy:
+      src: "{{ item }}"
+      dest: "~/"
+    with_items:
+    - "build_flightcontrol_aci.sh"
+    - "build_webui_aci.sh"
+    - "flightcontrol_startup.sh"
+  - name: Build flightcontrol container image
+    command: sh ./build_flightcontrol_aci.sh
+    args:
+      chdir: "~/"
+      creates: "flightcontrol.aci"
+  - name: Build webui container image
+    command: sh ./build_webui_aci.sh
+    args:
+      chdir: "~/"
+      creates: "webui.aci"
+
+# install dependencies
+# copy build scripts to vm
+# run build scripts
+# fetch aci files to host
