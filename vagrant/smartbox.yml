@@ -17,8 +17,10 @@
       content: "export SMARTBOX_HOME=\"{{ smartbox_home }}\""
       dest: /etc/profile.d/smartbox.sh
   
-  - name: Create smartbox_home directory
+  - name: Create flightcontrol directory
     file: path="{{ smartbox_home }}/flightcontrol" state=directory
+    
+  - name: Create webiu directory
     file: path="{{ smartbox_home }}/webiu" state=directory
 
   - name: Copy flightcontrol

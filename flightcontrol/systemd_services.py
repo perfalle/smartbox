@@ -1,4 +1,5 @@
-"""This module communicated with the dbus to control systemd services.
+"""
+This module communicates with the dbus to control systemd services.
 Reference for dbus calls: https://www.freedesktop.org/wiki/Software/systemd/dbus/
 
 This module manages all systemd services used by smartbox.

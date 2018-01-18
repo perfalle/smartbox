@@ -4,11 +4,11 @@
     smartbox_home: "/smartbox"
   remote_user: root
   tasks:
-  - name: Install git
+  - name: Install git to get acbuild source code
     yum:
       name: git
       state: present
-  - name: Install go
+  - name: Install go to build acbuild
     yum:
       name: golang
       state: present
