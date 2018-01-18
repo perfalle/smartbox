@@ -1,5 +1,5 @@
 ---
-- hosts: smartbox
+- hosts: smartboxbuild
   vars:
     smartbox_home: "/smartbox"
   remote_user: root
@@ -34,6 +34,10 @@
     args:
       chdir: "~/"
       creates: "webui.aci"
+  - name: Let vagrant user read /root
+    file:
+      path: /root
+      mode: 777
 
 # install dependencies
 # copy build scripts to vm

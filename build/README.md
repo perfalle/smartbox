@@ -28,3 +28,9 @@ Finally copy __smartbox.service__ from the build directory to __/etc/systemd/sys
 
 
 Now you can run smartbox with systemd: __systemctl start smartbox__
+
+
+# Build with vagrant
+* run *build.sh*
+* * This script will use vagrant to create a VM
+* * The vagrant plugin *vagrant-scp* will be installed
