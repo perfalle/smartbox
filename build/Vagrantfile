@@ -8,7 +8,7 @@ Vagrant.configure(2) do |config|
     sudo dnf install -y python yum libselinux-python
   SHELL
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "resources/playbook.yml"
+    ansible.playbook = "smartboxbuild.yml"
     ansible.sudo = true
   end
 end
