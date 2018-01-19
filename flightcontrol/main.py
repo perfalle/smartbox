@@ -14,10 +14,12 @@ import templates
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+WEBUI_PORT = 8080
+
 def restart_webui():
     """(Re)starts the webui service"""
     com.ensure_com_directories()
-    content = templates.generate_webui_unit()
+    content = templates.generate_webui_unit(WEBUI_PORT)
     systemd_services.restart(systemd_services.NAMESPACE_INTERNAL, "webui", content)
 
 def restart_apiservice():
