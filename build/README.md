@@ -31,6 +31,6 @@ Now you can run smartbox with systemd: __systemctl start smartbox__
 
 
 # Build with vagrant
-* run *build.sh*
-* * This script will use vagrant to create a VM
-* * The vagrant plugin *vagrant-scp* will be installed
+* run __build.sh__
+* This creates the __ansible__ directory, containing an ansible role to install smartbox
+* In the ansible directory run __ansible-playbook -i "*SERVER_IP* ," -u *REMOTE_USER* --ask-pass --ask-become-pass smartboxinstall.yml__

@@ -3,3 +3,4 @@
 local/
 *.directory
 *.vagrant
+build/ansible
