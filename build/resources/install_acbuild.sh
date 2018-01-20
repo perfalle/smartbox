@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 cd ~
 git clone https://github.com/containers/build acbuild_repo
 cd acbuild_repo

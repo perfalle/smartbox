@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 ./acbuild --debug begin docker://python
 ./acbuild --debug set-name webui
 ./acbuild --debug run -- pip3 install django
