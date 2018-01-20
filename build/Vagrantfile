@@ -1,11 +1,11 @@
 Vagrant.configure(2) do |config|
   config.ssh.insert_key = false
   config.ssh.password = false
-  config.vm.box = "fedora/25-cloud-base"
+  config.vm.box = "centos/7"
   config.vm.define :smartboxbuild do |smartboxbuild|
   end
   config.vm.provision "shell", inline: <<-SHELL
-    sudo dnf install -y python yum libselinux-python
+    sudo yum install -y python yum libselinux-python
   SHELL
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "resources/smartboxbuild.yml"
