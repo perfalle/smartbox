@@ -26,14 +26,18 @@
     - "flightcontrol_startup.sh"
   - name: Build flightcontrol container image
     command: sh ./build_flightcontrol_aci.sh
+    register: build_flightcontrol_aci
     args:
       chdir: "~/"
       creates: "flightcontrol.aci"
+  - debug: var=build_flightcontrol_aci.stdout_lines
   - name: Build webui container image
+    register: build_webui_aci
     command: sh ./build_webui_aci.sh
     args:
       chdir: "~/"
       creates: "webui.aci"
+  - debug: var=build_webui_aci.stdout_lines
   - name: Let vagrant user read /root
     file:
       path: /root
