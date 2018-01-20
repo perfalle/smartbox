@@ -63,7 +63,7 @@
 
   - name: Copy service unit file
     become: yes
-    copy: src="smartbox.internal.flightcontrol.service" dest="/etc/systemd/system/smartbox.service"
+    copy: src="smartbox.internal.flightcontrol.service" dest="/etc/systemd/system/smartbox.internal.flightcontrol.service"
 
   - name: systemd daemon-reload
     systemd: daemon_reload=yes
