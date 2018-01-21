@@ -1,5 +1,5 @@
 # How to build and run smartbox
-* run __build.sh__
+* run __./build.sh__
 * This creates the _ansible_ directory, containing an ansible role to install smartbox
 * In the _ansible_ directory run __ansible-playbook -i "*SERVER_IP* ," -u *REMOTE_USER* --ask-pass --ask-become-pass smartboxinstall.yml__
 
