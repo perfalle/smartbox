@@ -4,5 +4,6 @@ Description=Smartbox web user interface
 Type=simple
 ExecStartPre=/bin/sh -c '/bin/mkdir -p {{ com_directory }}'
 ExecStart=/bin/sh -c '/usr/bin/rkt run --insecure-options=image --net=default --port=webuihttp:{{ webui_port }} --volume com,kind=host,source="{{ com_directory }}" --volume root,kind=host,source="{{ webui_files_directory }}" {{ webui_aci_path }}'
-Restart=yes
+ExecStartPost=/bin/sh -c '/usr/bin/rkt gc --grace-period=0 || exec "echo pod gc failed"'
+Restart=always
 KillMode=mixed
