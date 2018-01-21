@@ -47,9 +47,9 @@ def generate_webui_unit(port):
     """Generates the content of the unit file, that runs the smartbox webui service."""
     context = {'com_directory': com.COM_ROOT_PATH,
                # TODO: find a place for path constant
-               'webui_files_directory': '$SMARTBOX_HOME/webui',
+               'webui_files_directory': '/etc/smartbox/webui',
                # TODO: find a place for path constant
-               'webui_aci_path': '$SMARTBOX_HOME/webui.aci',
+               'webui_aci_path': '/etc/smartbox/webui.aci',
                'webui_port': port}
     return _get_template_environment().get_template('webui.service').render(context)
 

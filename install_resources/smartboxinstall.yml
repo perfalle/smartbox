@@ -4,7 +4,6 @@
   become_user: root
   vars:
     ansible_python_interprete: "/usr/bin/python2"
-    smartbox_home: "/smartbox"
   
   tasks:
   - name: Install rkt
@@ -18,56 +17,52 @@
     become: yes
     script: install_rkt_debian.sh
     when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-
-  - name: Set environment variables
-    become: yes
-    copy:
-      content: "export SMARTBOX_HOME=\"{{ smartbox_home }}\""
-      dest: /etc/profile.d/smartbox.sh
   
   - name: Create flightcontrol directory
     become: yes
-    file: path="{{ smartbox_home }}/flightcontrol" state=directory
+    file: path="/etc/smartbox/flightcontrol" state=directory
     
   - name: Create webiu directory
     become: yes
-    file: path="{{ smartbox_home }}/webiu" state=directory
+    file: path="/etc/smartbox/webiu" state=directory
 
   - name: Copy flightcontrol container image
     become: yes
     copy:
       src: "flightcontrol.aci"
-      dest: "{{ smartbox_home }}/flightcontrol.aci"
+      dest: "/etc/smartbox/flightcontrol.aci"
       owner: root
 
   - name: Copy flightcontrol code
     become: yes
     copy:
       src: "../../flightcontrol/"
-      dest: "{{ smartbox_home }}/flightcontrol"
+      dest: "/etc/smartbox/flightcontrol"
       owner: root
 
   - name: Copy webui container image
     become: yes
     copy:
       src: "webui.aci"
-      dest: "{{ smartbox_home }}/webui.aci"
+      dest: "/etc/smartbox/webui.aci"
       owner: root
 
   - name: Copy webui code
     become: yes
     copy:
       src: "../../webui/"
-      dest: "{{ smartbox_home }}/webiu"
+      dest: "/etc/smartbox/webui"
       owner: root
 
   - name: Copy service unit file
     become: yes
-    copy: src="smartbox.internal.flightcontrol.service" dest="/etc/systemd/system/smartbox.internal.flightcontrol.service"
+    copy: 
+      src: "smartbox.internal.flightcontrol.service"
+      dest: "/etc/systemd/system/smartbox.internal.flightcontrol.service"
 
   - name: systemd daemon-reload
     systemd: daemon_reload=yes
 
   - name: (re)start smartbox service
     become: yes
-    service: name=smartbox state=restarted
+    service: name=smartbox.internal.flightcontrol state=restarted

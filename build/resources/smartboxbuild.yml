@@ -1,7 +1,5 @@
 ---
 - hosts: smartboxbuild
-  vars:
-    smartbox_home: "/smartbox"
   remote_user: root
   tasks:
   - name: Install git to get acbuild source code
@@ -16,7 +14,11 @@
     script: install_acbuild.sh
     args:
       creates: "~/acbuild"
-  - name: Copy ressources
+  # - name: Copy resources
+  #   template:
+  #     src: "build_flightcontrol_aci.sh.j2"
+  #     dest: "~/build_flightcontrol_aci.sh"
+  - name: Copy resources
     copy:
       src: "{{ item }}"
       dest: "~/"
