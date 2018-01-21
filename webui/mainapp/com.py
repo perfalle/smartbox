@@ -4,7 +4,7 @@ import os
 import yaml
 from . import utils
 
-COM_ROOT_PATH = '/home/smartbox/com'
+COM_ROOT_PATH = '/var/smartbox/com'
 
 WEBUI_PATH = os.path.join(COM_ROOT_PATH, 'webui')
 IMAGES_PATH = os.path.join(WEBUI_PATH, 'images')
