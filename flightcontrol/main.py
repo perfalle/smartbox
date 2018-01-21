@@ -14,10 +14,12 @@ import templates
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+WEBUI_PORT = 8080
+
 def restart_webui():
     """(Re)starts the webui service"""
     com.ensure_com_directories()
-    content = templates.generate_webui_unit()
+    content = templates.generate_webui_unit(WEBUI_PORT)
     systemd_services.restart(systemd_services.NAMESPACE_INTERNAL, "webui", content)
 
 def restart_apiservice():
@@ -64,8 +66,9 @@ def get_restart_required(service_name, service_description):
     actual_content = systemd_services.get_content(systemd_services.NAMESPACE_RUN,
                                                   service_name) or str()
     desired_content = templates.generate_running_unit(service_name, service_description)
-    diff = utils.get_diff(actual_content, desired_content)
-    return 'ExecStart' in diff
+    # diff = utils.get_diff(actual_content, desired_content)
+    # return 'ExecStart' in diff
+    return actual_content != desired_content
 
 def service_image_available(service_name):
     """Checks if the image of the service is available"""

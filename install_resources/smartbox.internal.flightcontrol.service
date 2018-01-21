@@ -1,0 +1,9 @@
+[Unit]
+Description=Smartbox flight control
+[Service]
+Type=simple
+ExecStartPre=/bin/sh -c '/bin/mkdir -p /var/smartbox/com'
+ExecStart=/bin/sh -c '/usr/bin/rkt run --insecure-options=image --stage1-name=coreos.com/rkt/stage1-fly:1.4.0 --net=none --volume unitfiles,kind=host,source="/etc/systemd/system" --volume com,kind=host,source="/var/smartbox/com" --volume dbussocketlocation,kind=host,source="/var/run/dbus" --volume flightcontrol,kind=host,source="/etc/smartbox/flightcontrol" /etc/smartbox/flightcontrol.aci'
+ExecStartPost=/bin/sh -c '/usr/bin/rkt gc --grace-period=0 || exec "echo pod gc failed"'
+Restart=always
+KillMode=mixed

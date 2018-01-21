@@ -7,12 +7,14 @@ import com
 import utils
 import apiservice
 
+
 def _get_template_environment():
     local_directory = os.path.dirname(os.path.abspath(__file__))
     templates_directory = os.path.join(local_directory, 'templates')
     return Environment(autoescape=False,
                        loader=FileSystemLoader(templates_directory),
                        trim_blocks=True)
+
 
 def generate_fetching_unit(service_name, service_description):
     """Generates the content of a oneshot unit file, that fetches the image for a service.
@@ -24,6 +26,7 @@ def generate_fetching_unit(service_name, service_description):
                'image_source': image_source,
                'image_id_path': image_id_path}
     return template.render(context)
+
 
 def generate_running_unit(service_name, service_description):
     """Generates the content of a unit file, that runs a rkt pod for the service.
@@ -39,22 +42,33 @@ def generate_running_unit(service_name, service_description):
                'uuid_path': uuid_path}
     return _get_template_environment().get_template('running.service').render(context)
 
-def generate_webui_unit():
+
+def generate_webui_unit(port):
     """Generates the content of the unit file, that runs the smartbox webui service."""
-    return _get_template_environment().get_template('webui.service').render({})
+    context = {'com_directory': com.COM_ROOT_PATH,
+               # TODO: find a place for path constant
+               'webui_files_directory': '/etc/smartbox/webui',
+               # TODO: find a place for path constant
+               'webui_aci_path': '/etc/smartbox/webui.aci',
+               'webui_port': port}
+    return _get_template_environment().get_template('webui.service').render(context)
+
 
 def generate_apiservice_unit():
     """Generates the content of the unit file, that runs rkt's api-service."""
     return _get_template_environment().get_template('apiservice.service').render({})
 
+
 def generate_reverse_proxy_site(service_name, service_description):
     """Generates the content of an Nginx site configuration (aka. service block),
     including hostname recognition, reverse proxy, SSL termination"""
-    raise NotImplementedError() #TODO: implement
+    raise NotImplementedError()  # TODO: implement
+
 
 def generate_reverse_proxy_conf():
     """Generates the general configuration for Nginx"""
-    raise NotImplementedError() #TODO: implement
+    raise NotImplementedError()  # TODO: implement
+
 
 def _get_image_source(service_description):
     src_types = ['source_url', 'source_file']
@@ -62,13 +76,16 @@ def _get_image_source(service_description):
         raise KeyError('Service description must contain a source field')
     src_type = service_description['source']
     if src_type not in src_types:
-        raise KeyError('Invalid source type %s. Must be one of %s' % (src_type, src_types))
+        raise KeyError('Invalid source type %s. Must be one of %s' %
+                       (src_type, src_types))
     if src_type not in service_description:
-        raise KeyError('Source type "%s" not flund in service description' % src_type)
+        raise KeyError(
+            'Source type "%s" not flund in service description' % src_type)
     src = service_description[src_type]
     if src_type == 'source_file':
         src = os.path.join(com.IMAGES_PATH, src)
     return src
+
 
 def _get_and_ensure_volumes(service_name):
     volumes = {}

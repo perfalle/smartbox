@@ -3,29 +3,34 @@
 The following steps show how to run smartbox for development and testing.
 DO NOT RUN smartbox this way for production!
 
-## 1. Build the containers
-Requirements to run smartbox:
+## 1. Build the container images
+The components of smartbox run in containers. To build the container images, set up a VM (e.g. Debian 8, 64 bit) with the following things installed:
 
-Linux OS with acbuild and all dependencies as needed by the _build\_\*\_aci.sh_-scripts
-Run these scripts as root.
+ * acbuild (https://packages.debian.org/de/sid/acbuild)
 
-_NOTE:_ The containers are empty after build. They expect a volume for the python code when started.
+Clone this repo into this VM and run __build\_flightcontrol\_aci.sh__ and __build\_webui\_aci.sh__ as root.
+__flightcontrol.aci__ and __webui.aci__ will be created.
+_NOTE:_ The container images are empty after build. They expect a volume for the python code when started.
+_NOTE:_ Since the containers just contain all the dependencies and not the smartbox code itsself, you propably won't rebuild them too often.
+
+For the next steps, you only need the generated files (__flightcontrol.aci__ and __webui.aci__).
+
 
 ## 2. Run smartbox
 Requirements to run smartbox:
 
-Linux OS with rkt, acbuild and systemd.
+Linux OS with rkt and systemd (e.g. Debian 8, 64 bit).
 
-Add a user _smartbox_ and add grant it all sudo privileges and add it to the rkt group.
+Now the files from this repo need to be copied to the target system:
+Create the directory __/opt/smartbox__ (or any other place) and set the environment variable __SMARTBOX\_HOME__ to that path.
+Copy the __flightcontrol__ and __webui__ directories, as well as the __flightcontrol.aci__ and __webui.aci__ files to __SMARTBOX\_HOME__.
+Finally copy __smartbox.service__ from the build directory to __/etc/systemd/system/__.
 
-Copy the following files to /home/smartbox:
-* build/\*.aci
-* build/run\_\*.sh
-* flightcontrol/\*
-* webui/\*
 
-Remove all other files or directories.
+Now you can run smartbox with systemd: __systemctl start smartbox__
 
-Run the _run\_\*.sh_-scripts as root.
 
-_NOTE:_ It is not necessary to rebuild the containers unless the dependencies have changed. Just update the source files and restart the containers.
+# Build with vagrant
+* run __build.sh__
+* This creates the __ansible__ directory, containing an ansible role to install smartbox
+* In the ansible directory run __ansible-playbook -i "*SERVER_IP* ," -u *REMOTE_USER* --ask-pass --ask-become-pass smartboxinstall.yml__

@@ -1,8 +1,9 @@
 [Unit]
-Description=Smartbox webui
+Description=Smartbox web user interface
 [Service]
 Type=simple
-ExecStartPre=/bin/sh -c '/bin/mkdir -p /home/smartbox/com'
-ExecStart=/bin/sh -c '/usr/bin/rkt run --insecure-options=image --net=default --port=webuihttp:8080 --volume com,kind=host,source="/home/smartbox/com" --volume root,kind=host,source="/home/smartbox/webui" /home/smartbox/build/webui.aci'
-Restart=yes
+ExecStartPre=/bin/sh -c '/bin/mkdir -p {{ com_directory }}'
+ExecStart=/bin/sh -c '/usr/bin/rkt run --insecure-options=image --net=default --port=webuihttp:{{ webui_port }} --volume com,kind=host,source="{{ com_directory }}" --volume root,kind=host,source="{{ webui_files_directory }}" {{ webui_aci_path }}'
+ExecStartPost=/bin/sh -c '/usr/bin/rkt gc --grace-period=0 || exec "echo pod gc failed"'
+Restart=always
 KillMode=mixed

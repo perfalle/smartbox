@@ -1,3 +1,6 @@
 *.pyc
 *.aci
 local/
+*.directory
+*.vagrant
+build/ansible

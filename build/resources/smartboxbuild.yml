@@ -1,0 +1,51 @@
+---
+- hosts: smartboxbuild
+  remote_user: root
+  tasks:
+  - name: Install git to get acbuild source code
+    yum:
+      name: git
+      state: present
+  - name: Install go to build acbuild
+    yum:
+      name: golang
+      state: present
+  - name: Install acbuild
+    script: install_acbuild.sh
+    args:
+      creates: "~/acbuild"
+  # - name: Copy resources
+  #   template:
+  #     src: "build_flightcontrol_aci.sh.j2"
+  #     dest: "~/build_flightcontrol_aci.sh"
+  - name: Copy resources
+    copy:
+      src: "{{ item }}"
+      dest: "~/"
+    with_items:
+    - "build_flightcontrol_aci.sh"
+    - "build_webui_aci.sh"
+    - "flightcontrol_startup.sh"
+  - name: Build flightcontrol container image
+    command: sh ./build_flightcontrol_aci.sh
+    register: build_flightcontrol_aci
+    args:
+      chdir: "~/"
+      creates: "flightcontrol.aci"
+  - debug: var=build_flightcontrol_aci.stdout_lines
+  - name: Build webui container image
+    register: build_webui_aci
+    command: sh ./build_webui_aci.sh
+    args:
+      chdir: "~/"
+      creates: "webui.aci"
+  - debug: var=build_webui_aci.stdout_lines
+  - name: Let vagrant user read /root
+    file:
+      path: /root
+      mode: 777
+
+# install dependencies
+# copy build scripts to vm
+# run build scripts
+# fetch aci files to host
