@@ -39,12 +39,26 @@
       src: "../../flightcontrol/"
       dest: "/etc/smartbox/flightcontrol"
       owner: root
+  
+  - name: Copy common code into flightcontrol
+    become: yes
+    copy:
+      src: "../../common"
+      dest: "/etc/smartbox/flightcontrol"
+      owner: root
 
   - name: Copy webui container image
     become: yes
     copy:
       src: "webui.aci"
       dest: "/etc/smartbox/webui.aci"
+      owner: root
+
+  - name: Copy common code into webui
+    become: yes
+    copy:
+      src: "../../common"
+      dest: "/etc/smartbox/webui"
       owner: root
 
   - name: Copy webui code

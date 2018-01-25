@@ -32,7 +32,16 @@ def get_service_state_path(service_name):
     return os.path.join(SERVICE_STATES_PATH, service_name + YAML_EXT)
 
 
+def get_service_uuid_path(service_name):
+    return os.path.join(UUIDS_PATH, service_name)
+
+
+def get_service_image_path(service_name):
+    return os.path.join(IMAGEIDS_PATH, service_name)
+
+
 # read
+
 
 def read_global_config():
     global_config = _load_yaml_file(GLOBAL_CONFIGS_PATH)
@@ -55,7 +64,7 @@ def read_global_state():
 
 
 def read_service_config(service_name):
-    service_config = _load_yaml_file()
+    service_config = _load_yaml_file(get_service_config_path(service_name))
     validation_errors = validation.validate_service_state(service_config)
     if not validation_errors:
         return service_config
@@ -72,6 +81,27 @@ def read_service_state(service_name):
     else:
         print('service state validation error',
               service_name, service_state, validation_errors)
+
+
+def read_service_uuid(service_name):
+    """Returns the pod uuid for a service, if available"""
+    uuid_path = get_service_uuid_path(service_name)
+    if not os.path.exists(uuid_path):
+        return None
+    with open(uuid_path, 'r') as uuid_file:
+        return uuid_file.readline()[:-1] # remove \n at the end
+
+
+def read_service_image_id(service_name):
+    """Returns the image id for a service, if available"""
+    image_id_path = get_service_image_path(service_name)
+    if not os.path.exists(image_id_path):
+        print('no imageID file', image_id_path)
+        return None
+    with open(image_id_path, 'r') as image_id_file:
+        image_id_file_content = image_id_file.readline()
+        image_id = image_id_file_content[:-1] # remove \n at the end
+        return image_id
 
 
 # write

@@ -13,8 +13,8 @@ SERVICES_PATH = os.path.join(WEBUI_PATH, 'services.yml')
 FLIGHTCONTROL_PATH = os.path.join(COM_ROOT_PATH, 'flightcontrol')
 STATUS_PATH = os.path.join(FLIGHTCONTROL_PATH, 'status.yml')
 
-def get_service_descriptions():
-    """Returns the service descriptions"""
+def get_service_configs():
+    """Returns the service configs"""
     return _load_yaml_file(SERVICES_PATH)
 
 def get_status():
@@ -23,33 +23,33 @@ def get_status():
 
 def set_running_desired(service_name, running_desired):
     """Updates running_desired in the services.yml file for flightcontrol"""
-    _set_service_description_entry(service_name, 'running_desired', running_desired)
+    _set_service_config_entry(service_name, 'running_desired', running_desired)
 
 def set_ports(service_name, ports):
     """Updates ports entry in the services.yml file for flightcontrol"""
-    _set_service_description_entry(service_name, 'ports', ports)
+    _set_service_config_entry(service_name, 'ports', ports)
 
-def add_service_description(service_name, service_description):
-    """Adds a new service description to the services.yml file for flightcontrol"""
-    service_descriptions = get_service_descriptions()
-    service_descriptions[service_name] = service_description
-    _set_service_descriptions(service_descriptions)
+def add_service_config(service_name, service_config):
+    """Adds a new service config to the services.yml file for flightcontrol"""
+    service_configs = get_service_configs()
+    service_configs[service_name] = service_config
+    _set_service_configs(service_configs)
 
-def remove_service_description(service_name):
-    """Removes a service description from the services.yml file for flightcontrol"""
-    service_descriptions = get_service_descriptions()
-    if service_name in service_descriptions:
-        service_descriptions.pop(service_name)
-    _set_service_descriptions(service_descriptions)
+def remove_service_config(service_name):
+    """Removes a service config from the services.yml file for flightcontrol"""
+    service_configs = get_service_configs()
+    if service_name in service_configs:
+        service_configs.pop(service_name)
+    _set_service_configs(service_configs)
 
-def _set_service_descriptions(service_descriptions):
-    _dump_yaml_file(SERVICES_PATH, service_descriptions)
+def _set_service_configs(service_configs):
+    _dump_yaml_file(SERVICES_PATH, service_configs)
 
-def _set_service_description_entry(service_name, entry_name, entry_value):
-    service_descriptions = get_service_descriptions()
-    if service_name in service_descriptions:
-        service_descriptions[service_name][entry_name] = entry_value
-    _set_service_descriptions(service_descriptions)
+def _set_service_config_entry(service_name, entry_name, entry_value):
+    service_configs = get_service_configs()
+    if service_name in service_configs:
+        service_configs[service_name][entry_name] = entry_value
+    _set_service_configs(service_configs)
 
 def _load_yaml_file(path):
     if not os.path.exists(path):

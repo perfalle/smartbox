@@ -16,7 +16,7 @@ def _get_template_environment():
                        trim_blocks=True)
 
 
-def generate_fetching_unit(service_name, service_description):
+def generate_fetching_unit(service_name, service_config):
     """Generates the content of a oneshot unit file, that fetches the image for a service.
     It writes the image id to an image id file."""
     image_source = _get_image_source(service_description)
@@ -89,7 +89,7 @@ def _get_image_source(service_description):
 
 def _get_and_ensure_volumes(service_name):
     volumes = {}
-    for mountpoint in apiservice.get_mountpoints(com.get_image_id(service_name)):
+    for mountpoint in apiservice.get_mountpoints(com.read_service_image_id(service_name)):
         volumes[mountpoint] = os.path.join(com.VOLUMES_PATH, str(service_name))
         utils.ensure_directory(volumes[mountpoint])
     return volumes

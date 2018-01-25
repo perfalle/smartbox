@@ -7,14 +7,14 @@ from . import com, utils
 
 
 def show(request):
-    service_descriptions = com.get_service_descriptions()
+    service_configs = com.get_service_configs()
     status = com.get_status()
     service_contexts = []
-    for service_name in service_descriptions:
-        service_description = service_descriptions[service_name]
+    for service_name in service_configs:
+        service_config = service_configs[service_name]
         service_status = status.get(service_name, {})
         service_contexts.append(get_service_context(service_name,
-                                                    service_description,
+                                                    service_config,
                                                     service_status))
     context = {'services': service_contexts}
     return render(request, 'show.html', context)
@@ -35,21 +35,21 @@ def add(request):
         form = AddForm(request.POST, request.FILES)
         if form.is_valid():
             print('valid', request.POST, request.FILES)
-            service_description = dict()
+            service_config = dict()
             if 'imagefile' in request.FILES:
                 file = request.FILES['imagefile']
                 handle_uploaded_file(file)
-                service_description['source'] = 'source_file'
-                service_description['source_file'] = file.name
+                service_config['source'] = 'source_file'
+                service_config['source_file'] = file.name
             else:
-                service_description['source'] = 'source_url'
-                service_description['source_url'] = request.POST['url']
+                service_config['source'] = 'source_url'
+                service_config['source_url'] = request.POST['url']
 
-            service_description['ports'] = None
-            service_description['volumes'] = None
-            service_description['backup_strategies'] = None
-            service_description['running_desired'] = False
-            com.add_service_description(request.POST['service_name'], service_description)
+            service_config['ports'] = None
+            service_config['volumes'] = None
+            service_config['backup_strategies'] = None
+            service_config['running_desired'] = False
+            com.add_service_config(request.POST['service_name'], service_config)
             return redirect('/show')
         else:
             print('not valid', request.POST, request.FILES)
@@ -65,10 +65,10 @@ def handle_uploaded_file(f):
 
 def remove(request):
     service_name = str(request.path)[len('/remove/'):]
-    com.remove_service_description(service_name)
+    com.remove_service_config(service_name)
     return redirect('/show')
 
-def get_service_context(service_name, service_description, service_status):
+def get_service_context(service_name, service_config, service_status):
     service_context = dict()
     service_context['service_name'] = service_name
     service_context['state'] = service_status.get('state', 'noimage') or 'noimage'
@@ -78,29 +78,29 @@ def get_service_context(service_name, service_description, service_status):
     utc_time = max(int(service_status.get('ActiveEnterTimestamp', 0) or 0),
                    int(service_status.get('ActiveExitTimestamp', 0)) or 0)
     service_context['time'] = str(datetime.fromtimestamp(utc_time))
-    if 'source_url' in service_description:
-        service_context['source'] = service_description['source_url'] or str()
+    if 'source_url' in service_config:
+        service_context['source'] = service_config['source_url'] or str()
         service_context['source_type'] = 'url'
-    elif 'source_file' in service_description:
-        service_context['source'] = service_description['source_file'] or str()
+    elif 'source_file' in service_config:
+        service_context['source'] = service_config['source_file'] or str()
         service_context['source_type'] = 'file'
     service_context['ports'] = service_status.get('ports', {}) or {}
     service_context['volumes'] = service_status.get('volumes', {}) or {}
-    service_context['backups'] = service_description.get('backups', {}) or {}
+    service_context['backups'] = service_config.get('backups', {}) or {}
     return service_context
 
 
 def service(request):
-    service_descriptions = com.get_service_descriptions()
+    service_configs = com.get_service_configs()
     service_name = str(request.path)[len('/service/'):]
     status = com.get_status().get(service_name, {})
-    service_description = service_descriptions[service_name]
+    service_config = service_configs[service_name]
 
-    service_context = get_service_context(service_name, service_description, status)
+    service_context = get_service_context(service_name, service_config, status)
     context = dict()
     context['service'] = service_context
 
-    old_ports = service_description.get('ports', {}) or {}
+    old_ports = service_config.get('ports', {}) or {}
     print('old_ports', old_ports)
     for port_name in status.get('ports', {}) or {}:
         old_ports[port_name] = old_ports.get(port_name, None)

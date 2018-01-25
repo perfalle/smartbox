@@ -72,11 +72,11 @@ def get_restart_required(service_name, service_description):
 
 def service_image_available(service_name):
     """Checks if the image of the service is available"""
-    return apiservice.image_available(com.get_image_id(service_name))
+    return apiservice.image_available(com.read_service_image_id(service_name))
 
 def service_running(service_name):
     """Checks if the service is running"""
-    return apiservice.running(com.get_uuid(service_name))
+    return apiservice.running(com.read_service_uuid(service_name))
 
 #def restore_backup(service_name, backup):
 #def create_backup(service_name, backup):
@@ -104,8 +104,8 @@ def get_service_status(service_name, service_description):
     restart_required = get_restart_required(service_name, service_description)
     settings_errors = get_settings_errors(service_name, service_description)
     status['errors'] = settings_errors
-    status['ports'] = apiservice.get_ports(com.get_image_id(service_name))
-    status['mountpoints'] = apiservice.get_mountpoints(com.get_image_id(service_name))
+    status['ports'] = apiservice.get_ports(com.read_service_image_id(service_name))
+    status['mountpoints'] = apiservice.get_mountpoints(com.read_service_image_id(service_name))
     if img_available and running_desired and not settings_errors:
         if not running:
             status['state'] = 'starting'
