@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "patternProperties": 
+  {
+    "^.*$": 
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties":
+      {
+        "ports":
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties":
+          {
+            "^.*$": 
+            {
+              "type": "object",
+              "properties":
+              {
+                "direct_port": 
+                {
+                  "anyOf": [{"type": "integer"}, {"type": "null"}]
+                },
+                "proxy_port": 
+                {
+                  "anyOf": [{"type": "integer"}, {"type": "null"}]
+                },
+                "hostname": {"type": "string"}
+              }
+            }
+          }
+        },
+        "running": { "type": "boolean" },
+        "source_url": {"type": "string", "required": false},
+        "source_file": {"type": "string", "required": false}
+      }
+    }
+  }
+}
