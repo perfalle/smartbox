@@ -8,11 +8,13 @@ import time
 import dbus
 import utils
 import apiservice
-import com
 import systemd_services
 import templates
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import sys
+sys.path.append('..')
+from common import com, globals
 
 WEBUI_PORT = 8080
 
@@ -66,7 +68,7 @@ def get_restart_required(service_name, service_description):
     actual_content = systemd_services.get_content(systemd_services.NAMESPACE_RUN,
                                                   service_name) or str()
     desired_content = templates.generate_running_unit(service_name, service_description)
-    # diff = utils.get_diff(actual_content, desired_content)
+    # diff = globals.get_diff(actual_content, desired_content)
     # return 'ExecStart' in diff
     return actual_content != desired_content
 
@@ -83,13 +85,13 @@ def service_running(service_name):
 
 def get_fetching_progress(service_name):
     """Returns the fetching progress of the service, if available and None otherwise"""
-    utils.check_service_name(service_name)
+    globals.check_service_name(service_name)
     return 0
 
 def get_settings_errors(service_name, service_description):
     """Checks service descriptons for configuration errors"""
     errors = []
-    errors.append(utils.get_service_name_errors(service_name))
+    errors.append(globals.get_service_name_errors(service_name))
     return {}
 
 
@@ -108,20 +110,20 @@ def get_service_status(service_name, service_description):
     status['mountpoints'] = apiservice.get_mountpoints(com.read_service_image_id(service_name))
     if img_available and running_desired and not settings_errors:
         if not running:
-            status['state'] = 'starting'
+            status['status'] = 'starting'
         elif restart_required:
-            status['state'] = 'restarting'
+            status['status'] = 'restarting'
         else:
-            status['state'] = 'started'
+            status['status'] = 'started'
     elif not img_available and not running:
         if not settings_errors:
-            status['state'] = 'fetching'
+            status['status'] = 'fetching'
         else:
-            status['state'] = 'noimage'
+            status['status'] = 'noimage'
     elif running:
-        status['state'] = 'stopping'
+        status['status'] = 'stopping'
     else:
-        status['state'] = 'stopped'
+        status['status'] = 'stopped'
     return status
 
 def update_services():
@@ -140,15 +142,15 @@ def update_services():
     com.set_status(status)
     # apply actions
     for service_name in status:
-        state = status[service_name].get('state', None)
+        status = status[service_name].get('status', None)
         service_description = service_descriptions[service_name]
-        if state == 'fetching':
+        if status == 'fetching':
             fetch_service(service_name, service_description)
-        elif state == 'starting':
+        elif status == 'starting':
             start_service(service_name, service_description)
-        elif state == 'restarting':
+        elif status == 'restarting':
             restart_service(service_name, service_description)
-        elif state == 'stopping' or state == 'stopped':
+        elif status == 'stopping' or status == 'stopped':
             stop_service(service_name)
 
 
@@ -178,7 +180,7 @@ def main():
     update_services()
 
     # prepare starting webui
-    utils.ensure_directory(com.WEBUI_PATH)
+    globals.ensure_directory(com.WEBUI_PATH)
 
     # ensure that internal services are started
     restart_webui()

@@ -4,11 +4,13 @@ import urllib.parse
 from django.shortcuts import render, redirect
 from .forms import AddForm, PortForm
 from . import com, utils
-
+import sys
+sys.path.append('..')
+from common import com, globals
 
 def show(request):
-    service_configs = com.get_service_configs()
-    status = com.get_status()
+    service_configs = com.read_all_service_configs()
+    status = com.read_all_service_statuses()
     service_contexts = []
     for service_name in service_configs:
         service_config = service_configs[service_name]
@@ -58,7 +60,7 @@ def add(request):
     return render(request, 'add.html', {'form': form})
 
 def handle_uploaded_file(f):
-    utils.ensure_directory(com.IMAGES_PATH)
+    globals.ensure_directory(com.IMAGES_PATH)
     with open(os.path.join(com.IMAGES_PATH, f.name), 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
@@ -71,10 +73,10 @@ def remove(request):
 def get_service_context(service_name, service_config, service_status):
     service_context = dict()
     service_context['service_name'] = service_name
-    service_context['state'] = service_status.get('state', 'noimage') or 'noimage'
+    service_context['status'] = service_status.get('status', 'noimage') or 'noimage'
     service_context['url_service_name'] = urllib.parse.quote(service_name) # -> urllib.parse.unquote
-    service_context['active_state'] = service_status.get('ActiveState', '-') or '-'
-    service_context['sub_state'] = service_status.get('SubState', '-') or '-'
+    service_context['active_status'] = service_status.get('ActiveState', '-') or '-'
+    service_context['sub_status'] = service_status.get('SubState', '-') or '-'
     utc_time = max(int(service_status.get('ActiveEnterTimestamp', 0) or 0),
                    int(service_status.get('ActiveExitTimestamp', 0)) or 0)
     service_context['time'] = str(datetime.fromtimestamp(utc_time))
@@ -91,7 +93,7 @@ def get_service_context(service_name, service_config, service_status):
 
 
 def service(request):
-    service_configs = com.get_service_configs()
+    service_configs = com.read_all_service_configs()
     service_name = str(request.path)[len('/service/'):]
     status = com.get_status().get(service_name, {})
     service_config = service_configs[service_name]

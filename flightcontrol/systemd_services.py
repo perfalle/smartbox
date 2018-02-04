@@ -101,7 +101,7 @@ def _get_unit_name(namespace, service_name):
         raise KeyError('invalid namespace "%s" must be one in %s' % (namespace, valid_namespces))
     # allow generic unit file name here
     if service_name != '*':
-        utils.check_service_name(service_name)
+        globals.check_service_name(service_name)
     return '.'.join([UNIT_FILE_PREFIX, namespace, service_name, UNIT_FILE_SUFFIX])
 
 def _reload_unit_files():

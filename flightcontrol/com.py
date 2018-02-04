@@ -5,7 +5,7 @@ import shutil
 import yaml
 import utils
 
-from common.com import * # common directory ('../common' has to be copied next to this file)
+from common.com import *
 
 
 def get_service_configs():
@@ -22,7 +22,7 @@ def get_service_configs():
 
 def set_status(status):
     """Writes the status to the status.yml file for the webui to read"""
-    utils.ensure_directory_of_file(STATUS_PATH)
+    globals.ensure_directory_of_file(STATUS_PATH)
     with open(STATUS_PATH, 'w+') as status_file:
         status_file.write(yaml.safe_dump(status))
 
@@ -52,8 +52,3 @@ def rm_reverse_proxy_site(service_name):
         os.remove(site_path)
 
 
-def ensure_com_directories():
-    """Creates all given directories, if not existing"""
-    for dir_to_create in [IMAGES_PATH, UUIDS_PATH, VOLUMES_PATH,
-                          REVPROXY_CONF_PATH, REVPROXY_SITES_PATH, IMAGEIDS_PATH]:
-        utils.ensure_directory(dir_to_create)

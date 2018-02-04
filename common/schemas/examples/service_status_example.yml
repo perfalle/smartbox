@@ -1,0 +1,6 @@
+state: fetching
+errors: {}
+ports:
+  myoneandonlyport: None # webui needs a list of ports to to show them to the user
+mountpoints:
+  mymountpoint: "path/in/the/container/" 
