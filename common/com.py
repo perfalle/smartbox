@@ -1,7 +1,7 @@
 import os
 import shutil
 import yaml
-import utils
+from . import utils
 
 YAML_EXT = '.yml'
 COM_ROOT_PATH = os.path.join('/var/smartbox/com')
