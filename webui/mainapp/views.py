@@ -3,10 +3,9 @@ from datetime import datetime
 import urllib.parse
 from django.shortcuts import render, redirect
 from .forms import AddForm, PortForm
-from . import com, utils
 import sys
 sys.path.append('..')
-from common import com, globals
+from common import com, utils
 
 def show(request):
     service_configs = com.read_all_service_configs()
@@ -60,7 +59,7 @@ def add(request):
     return render(request, 'add.html', {'form': form})
 
 def handle_uploaded_file(f):
-    globals.ensure_directory(com.IMAGES_PATH)
+    utils.ensure_directory(com.IMAGES_PATH)
     with open(os.path.join(com.IMAGES_PATH, f.name), 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)

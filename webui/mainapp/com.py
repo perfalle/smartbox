@@ -59,6 +59,6 @@ def _load_yaml_file(path):
     return loaded_object or {}
 
 def _dump_yaml_file(path, obj):
-    globals.ensure_directory_of_file(path)
+    utils.ensure_directory_of_file(path)
     with open(path, 'w+') as dump_file:
         dump_file.write(yaml.safe_dump(obj))

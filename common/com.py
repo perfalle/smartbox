@@ -9,12 +9,12 @@ COM_ROOT_PATH = os.path.join('/var/smartbox/com')
 WEBUI_PATH = os.path.join(COM_ROOT_PATH, 'webui/')
 IMAGES_PATH = os.path.join(WEBUI_PATH, 'images/')
 SERVICE_CONFIGS_PATH = os.path.join(WEBUI_PATH, 'service_configs/')
+GLOBAL_CONFIGS_PATH = os.path.join(WEBUI_PATH, 'global_config' + YAML_EXT)
 
 FLIGHTCONTROL_PATH = os.path.join(COM_ROOT_PATH, 'flightcontrol/')
 SERVICE_STATUSES_PATH = os.path.join(FLIGHTCONTROL_PATH, 'service_statuses/')
-GLOBAL_STATUS_PATH = os.path.join(FLIGHTCONTROL_PATH, 'global_status' + YAML_EXT)
-GLOBAL_CONFIGS_PATH = os.path.join(FLIGHTCONTROL_PATH,
-                                   'global_config' + YAML_EXT)
+GLOBAL_STATUS_PATH = os.path.join(FLIGHTCONTROL_PATH,
+                                  'global_status' + YAML_EXT)
 
 HOST_PATH = os.path.join(COM_ROOT_PATH, 'host/')
 VOLUMES_PATH = os.path.join(FLIGHTCONTROL_PATH, 'volumes/')
@@ -40,6 +40,16 @@ def get_service_image_path(service_name):
     return os.path.join(IMAGEIDS_PATH, service_name)
 
 
+def ensure_com_directories():
+    """Creates all given directories, if not existing"""
+    paths = [
+        IMAGES_PATH, UUIDS_PATH, VOLUMES_PATH, IMAGEIDS_PATH,
+        SERVICE_STATUSES_PATH, SERVICE_CONFIGS_PATH
+    ]
+    for dir_to_create in paths:
+        utils.ensure_directory(dir_to_create)
+
+
 #region basic io
 
 
@@ -52,7 +62,7 @@ def _load_yaml_file(path):
 
 
 def _dump_yaml_file(path, obj):
-    globals.ensure_directory_of_file(path)
+    utils.ensure_directory_of_file(path)
     with open(path, 'w+') as dump_file:
         dump_file.write(yaml.safe_dump(obj))
 
@@ -61,7 +71,7 @@ def _dump_yaml_file(path, obj):
 
 
 def read_global_config():
-    global_config = _load_yaml_file(GLOBAL_CONFIGS_PATH)<
+    global_config = _load_yaml_file(GLOBAL_CONFIGS_PATH)
     validation_errors = validation.validate_global_config(global_config)
     if not validation_errors:
         return global_config
@@ -76,7 +86,8 @@ def read_global_status():
     if not validation_errors:
         return global_status
     else:
-        print('global status validation error', global_status, validation_errors)
+        print('global status validation error', global_status,
+              validation_errors)
 
 
 def read_service_config(service_name):
@@ -179,13 +190,36 @@ def write_service_status(service_name, service_status):
                          )  #, service_name, service_status, validation_errors
 
 
-def ensure_com_directories():
-    """Creates all given directories, if not existing"""
-    paths = [IMAGES_PATH, UUIDS_PATH, VOLUMES_PATH, IMAGEIDS_PATH]
-    for dir_to_create in paths:
-        globals.ensure_directory(dir_to_create)
+#region remove
+
+
+def rm_uuid_file(service_name):
+    """Removes the uuid file of the service"""
+    uuid_path = os.path.join(UUIDS_PATH, service_name)
+    if os.path.exists(uuid_path):
+        os.remove(uuid_path)
+
+
+def rm_image_id_file(service_name):
+    """Removes the image id file of the service"""
+    image_id_path = os.path.join(IMAGEIDS_PATH, service_name)
+    if os.path.exists(image_id_path):
+        os.remove(image_id_path)
+
+
+def rm_volumes(service_name):
+    """Removes all volumes of the service"""
+    volume_path = os.path.join(VOLUMES_PATH, service_name)
+    if os.path.exists(volume_path):
+        shutil.rmtree(volume_path)
+
+
+def rm_reverse_proxy_site(service_name):
+    """Removes the reverse proxy's site configuration of the service"""
+    pass
+    # site_path = os.path.join(REVPROXY_SITES_PATH, service_name)
+    # if os.path.exists(site_path):
+    #     os.remove(site_path)
 
 
 #region convenience
-
-#region misc

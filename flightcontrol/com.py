@@ -22,7 +22,7 @@ def get_service_configs():
 
 def set_status(status):
     """Writes the status to the status.yml file for the webui to read"""
-    globals.ensure_directory_of_file(STATUS_PATH)
+    utils.ensure_directory_of_file(STATUS_PATH)
     with open(STATUS_PATH, 'w+') as status_file:
         status_file.write(yaml.safe_dump(status))
 

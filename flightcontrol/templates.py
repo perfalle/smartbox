@@ -7,7 +7,7 @@ import utils
 import apiservice
 import sys
 sys.path.append('..')
-from common import com, globals
+from common import com, utils
 
 def _get_template_environment():
     local_directory = os.path.dirname(os.path.abspath(__file__))
@@ -92,5 +92,5 @@ def _get_and_ensure_volumes(service_name):
     volumes = {}
     for mountpoint in apiservice.get_mountpoints(com.read_service_image_id(service_name)):
         volumes[mountpoint] = os.path.join(com.VOLUMES_PATH, str(service_name))
-        globals.ensure_directory(volumes[mountpoint])
+        utils.ensure_directory(volumes[mountpoint])
     return volumes
