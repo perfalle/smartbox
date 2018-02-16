@@ -6,7 +6,6 @@ a common volume (cf. com module)."""
 
 import time
 import dbus
-import utils
 import apiservice
 import systemd_services
 import templates
