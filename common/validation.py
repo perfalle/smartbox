@@ -1,7 +1,7 @@
 from jsonschema import Draft4Validator
 import yaml, os
 
-SCHEMAS_ROOT = '/root/common/schemas'
+SCHEMAS_ROOT = os.path.join(os.path.dirname(__file__), 'schemas')
 GLOBAL_CONFIG_SCHEMA_PATH = os.path.join(SCHEMAS_ROOT, 'global_config_schema.yml')
 GLOBAL_STATUS_SCHEMA_PATH = os.path.join(SCHEMAS_ROOT, 'global_status_schema.yml')
 SERVICE_CONFIG_SCHEMA_PATH = os.path.join(SCHEMAS_ROOT, 'service_config_schema.yml')
@@ -17,7 +17,7 @@ def validate_global_status(global_status):
 
 
 def validate_service_config(service_config):
-    return _validate_with_schema(service_config, SERVICE_CONFIG_SCHEMA_PATH)
+    return k_validate_with_schema(service_config, SERVICE_CONFIG_SCHEMA_PATH)
 
 
 def validate_service_status(service_status):
