@@ -33,20 +33,6 @@
       dest: "/etc/smartbox/flightcontrol.aci"
       owner: root
 
-  - name: Copy flightcontrol code
-    become: yes
-    copy:
-      src: "../../flightcontrol/"
-      dest: "/etc/smartbox/flightcontrol"
-      owner: root
-  
-  - name: Copy common code into flightcontrol
-    become: yes
-    copy:
-      src: "../../common"
-      dest: "/etc/smartbox/flightcontrol"
-      owner: root
-
   - name: Copy webui container image
     become: yes
     copy:
@@ -54,11 +40,11 @@
       dest: "/etc/smartbox/webui.aci"
       owner: root
 
-  - name: Copy common code into webui
+  - name: Copy flightcontrol code
     become: yes
     copy:
-      src: "../../common"
-      dest: "/etc/smartbox/webui"
+      src: "../../flightcontrol/"
+      dest: "/etc/smartbox/flightcontrol"
       owner: root
 
   - name: Copy webui code
@@ -66,6 +52,20 @@
     copy:
       src: "../../webui/"
       dest: "/etc/smartbox/webui"
+      owner: root
+  
+  - name: Copy common code into flightcontrol
+    become: yes
+    copy:
+      src: "../../common/"
+      dest: "/etc/smartbox/flightcontrol/common"
+      owner: root
+
+  - name: Copy common code into webui
+    become: yes
+    copy:
+      src: "../../common/"
+      dest: "/etc/smartbox/webui/common"
       owner: root
 
   - name: Copy service unit file
