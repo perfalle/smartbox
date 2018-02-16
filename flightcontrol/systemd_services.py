@@ -12,7 +12,7 @@ smartbox.run.{service_name}.service         for the rkt run commands, that actua
 import os
 import glob
 import dbus
-import utils
+from common import com, utils
 
 UNIT_FILES_PATH = '/unitfiles'
 UNIT_FILE_PREFIX = 'smartbox'
