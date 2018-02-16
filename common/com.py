@@ -1,7 +1,7 @@
 import os
 import shutil
 import yaml
-from . import utils
+from . import utils, validation
 
 YAML_EXT = '.yml'
 COM_ROOT_PATH = os.path.join('/var/smartbox/com')
@@ -96,8 +96,8 @@ def read_service_config(service_name):
     if not validation_errors:
         return service_config
     else:
-        print('service config validation error', service_name, service_config,
-              validation_errors)
+        raise ValueError('service config validation error ' + str(
+            [service_name, service_config, validation_errors]))
 
 
 def read_service_names():
@@ -177,8 +177,12 @@ def write_service_config(service_name, service_config):
     if not validation_errors:
         _dump_yaml_file(get_service_config_path(service_name), service_config)
     else:
-        raise ValueError('service config validation error'
-                         )  #, service_name, service_config, validation_errors
+        raise ValueError(', '.join([
+            'service config validation error',
+            str(service_name),
+            str(service_config),
+            str(validation_errors)
+        ]))
 
 
 def write_service_status(service_name, service_status):
@@ -186,8 +190,12 @@ def write_service_status(service_name, service_status):
     if not validation_errors:
         _dump_yaml_file(get_service_status_path(service_name), service_status)
     else:
-        raise ValueError('service status validation error'
-                         )  #, service_name, service_status, validation_errors
+        raise ValueError(', '.join([
+            'service status validation error',
+            str(service_name),
+            str(service_status),
+            str(validation_errors)
+        ]))
 
 
 #region remove
@@ -223,3 +231,11 @@ def rm_reverse_proxy_site(service_name):
 
 
 #region convenience
+
+
+def set_running(service_name, running_desired):
+    pass
+
+
+def set_ports(service_name, running_desired):
+    pass
