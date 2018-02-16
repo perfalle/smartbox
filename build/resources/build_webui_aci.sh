@@ -5,6 +5,7 @@ set -e
 ./acbuild --debug set-name webui
 ./acbuild --debug run -- pip3 install django
 ./acbuild --debug run -- pip3 install pyyaml
+./acbuild --debug run -- pip3 install jsonschema
 ./acbuild --debug run -- mkdir -p var/smartbox/com
 ./acbuild --debug mount add com var/smartbox/com
 ./acbuild --debug mount add root root
