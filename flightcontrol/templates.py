@@ -3,7 +3,6 @@ unit files and reverse proxy configuration with jinja2 templates"""
 
 import os
 from jinja2 import Environment, FileSystemLoader
-import utils
 import apiservice
 import sys
 sys.path.append('..')
