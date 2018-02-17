@@ -92,7 +92,7 @@ def read_global_status():
 
 def read_service_config(service_name):
     service_config = _load_yaml_file(get_service_config_path(service_name))
-    validation_errors = validation.validate_service_status(service_config)
+    validation_errors = validation.validate_service_config(service_config)
     if not validation_errors:
         return service_config
     else:
