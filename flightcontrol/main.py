@@ -159,7 +159,7 @@ def update_services():
         service_status = get_service_status(service_name, service_config)
         com.write_service_status(service_name, service_status)
         statuses[service_name] = service_status
-        print('evaluated status', service_name, status[service_name])
+        print('evaluated status', service_name, service_status)
     # apply actions
     for service_name in statuses:
         service_state = statuses[service_name].get('state', None)
