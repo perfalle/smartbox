@@ -76,7 +76,7 @@ def remove(request):
 def get_service_context(service_name, service_config, service_status):
     service_context = dict()
     service_context['service_name'] = service_name
-    service_context['status'] = service_status.get('status',
+    service_context['state'] = service_status.get('state',
                                                    'noimage') or 'noimage'
     service_context['url_service_name'] = urllib.parse.quote(
         service_name)  # -> urllib.parse.unquote

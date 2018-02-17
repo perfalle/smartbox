@@ -128,20 +128,20 @@ def get_service_status(service_name, service_config):
         com.read_service_image_id(service_name))
     if img_available and running_desired and not settings_errors:
         if not running:
-            status['status'] = 'starting'
+            status['state'] = 'starting'
         elif restart_required:
-            status['status'] = 'restarting'
+            status['state'] = 'restarting'
         else:
-            status['status'] = 'started'
+            status['state'] = 'started'
     elif not img_available and not running:
         if not settings_errors:
-            status['status'] = 'fetching'
+            status['state'] = 'fetching'
         else:
-            status['status'] = 'noimage'
+            status['state'] = 'noimage'
     elif running:
-        status['status'] = 'stopping'
+        status['state'] = 'stopping'
     else:
-        status['status'] = 'stopped'
+        status['state'] = 'stopped'
     return status
 
 
