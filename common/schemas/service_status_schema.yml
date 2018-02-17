@@ -22,6 +22,6 @@
       }
     },
     "errors": { "type": "object" },
-    "state": {"anyOf": [{"noimage", "fetching", "starting", "running", "stopping", "stopped"}]}
+    "state": {type: "string", "enum": ["noimage", "fetching", "starting", "running", "stopping", "stopped"]}
   }
 }
