@@ -19,7 +19,7 @@ def _get_template_environment():
 def generate_fetching_unit(service_name, service_config):
     """Generates the content of a oneshot unit file, that fetches the image for a service.
     It writes the image id to an image id file."""
-    image_source = _get_image_source(service_description)
+    image_source = _get_image_source(service_config)
     image_id_path = os.path.join(com.IMAGEIDS_PATH, str(service_name))
     template = _get_template_environment().get_template('fetching.service')
     context = {'service_name': service_name,
@@ -28,12 +28,12 @@ def generate_fetching_unit(service_name, service_config):
     return template.render(context)
 
 
-def generate_running_unit(service_name, service_description):
+def generate_running_unit(service_name, service_config):
     """Generates the content of a unit file, that runs a rkt pod for the service.
     It writes the pod uuid to an uuid file."""
     image_id_path = os.path.join(com.IMAGEIDS_PATH, str(service_name))
     uuid_path = os.path.join(com.UUIDS_PATH, str(service_name))
-    ports = service_description.get('ports', {}) or {}
+    ports = service_config.get('ports', {}) or {}
     volumes = _get_and_ensure_volumes(service_name)
     context = {'service_name': service_name,
                'ports': ports,
@@ -59,7 +59,7 @@ def generate_apiservice_unit():
     return _get_template_environment().get_template('apiservice.service').render({})
 
 
-def generate_reverse_proxy_site(service_name, service_description):
+def generate_reverse_proxy_site(service_name, service_config):
     """Generates the content of an Nginx site configuration (aka. service block),
     including hostname recognition, reverse proxy, SSL termination"""
     raise NotImplementedError()  # TODO: implement
@@ -70,20 +70,13 @@ def generate_reverse_proxy_conf():
     raise NotImplementedError()  # TODO: implement
 
 
-def _get_image_source(service_description):
-    src_types = ['source_url', 'source_file']
-    if not 'source' in service_description:
-        raise KeyError('Service description must contain a source field')
-    src_type = service_description['source']
-    if src_type not in src_types:
-        raise KeyError('Invalid source type %s. Must be one of %s' %
-                       (src_type, src_types))
-    if src_type not in service_description:
-        raise KeyError(
-            'Source type "%s" not flund in service description' % src_type)
-    src = service_description[src_type]
-    if src_type == 'source_file':
-        src = os.path.join(com.IMAGES_PATH, src)
+def _get_image_source(service_config):
+    if 'source_url' in service_config:
+        src = service_config['source_url']
+    elif 'source_file'in service_config:
+        src = os.path.join(com.IMAGES_PATH, service_config['source_file'])
+    else:
+        raise KeyError('Service config must contain either a source_url or a source_file field')
     return src
 
 
