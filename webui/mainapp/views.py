@@ -100,18 +100,17 @@ def get_service_context(service_name, service_config, service_status):
 
 
 def service(request):
-    service_configs = com.read_all_service_configs()
     service_name = str(request.path)[len('/service/'):]
-    status = com.get_status().get(service_name, {})
-    service_config = service_configs[service_name]
+    service_status = com.read_service_status(service_name)
+    service_config = com.read_service_config(service_name)
 
-    service_context = get_service_context(service_name, service_config, status)
+    service_context = get_service_context(service_name, service_config, service_status)
     context = dict()
     context['service'] = service_context
 
     old_ports = service_config.get('ports', {}) or {}
     print('old_ports', old_ports)
-    for port_name in status.get('ports', {}) or {}:
+    for port_name in service_status.get('ports', {}) or {}:
         old_ports[port_name] = old_ports.get(port_name, None)
     port_form = PortForm(request.POST or None, request.FILES or None)
     port_form.add_ports(old_ports)
