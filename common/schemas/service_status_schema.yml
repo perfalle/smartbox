@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties":
+  {
+    "ports":
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties":
+      {
+        "^.*$": { "type": "string" }
+      }
+    },
+    "mountpoints":
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties":
+      {
+        "^.*$": { "type": "string" }
+      }
+    },
+    "errors": { "type": "object" },
+    "state": {type: "string", "enum": ["noimage", "fetching", "starting", "running", "stopping", "stopped"]}
+  }
+}

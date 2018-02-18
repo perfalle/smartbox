@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "service config",
+  "description": "Smartbox service configuration file",
+
+  "type": "object",
+  "additionalProperties": false,
+  "properties":
+  {
+    "running": {"type": "boolean"},
+    "source_url": {"type": "string"},
+    "source_file": {"type": "string"},
+    "ports":
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties":
+      {
+        "^.*$": 
+        {
+          "type": "object",
+          "properties":
+          {
+            "direct_port":
+            {
+              "anyOf": [{"type": "integer"}, {"type": "null"}]
+            },
+            "proxy_port":
+            {
+              "anyOf": [{"type": "integer"}, {"type": "null"}]
+            },
+            "hostname": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+ports: 
+  myoneandonlyport: 
+    direct_port: null # if set, the port is directly published to the given public port of the host machine. TODO: only allow connections via revproxy?
+    hostname: 'cloud.local' # if .local, a zeroconf hostname should be created, otherwise smartbox expects that dns is set up. TODO: list of hostnames?
+    proxy_port: 80 # make revproxy listen on that port and redirect requests to service. Accessable under hostname:proxy_port
+running: true # should the service be running?
+source_url: 'docker://nextcloud' # either source_url or source_file should be present, source_urlis preferred
+source_file: 'mycustomimage.aci' # file in <com>/webui/images/<servicename>/
