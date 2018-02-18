@@ -117,7 +117,7 @@ def get_service_status(service_name, service_config):
     """Evaluates the status of a service"""
     status = {}
     img_available = service_image_available(service_name)
-    running_desired = service_config.get('running_desired', False)
+    running_desired = service_config.get('running', False)
     running = service_running(service_name)
     restart_required = get_restart_required(service_name, service_config)
     settings_errors = get_settings_errors(service_name, service_config)
@@ -190,6 +190,7 @@ class ComEventHandler(FileSystemEventHandler):
 
 
 def main():
+    print('flightcontrol main')
     """Main method of smartbox flightcontrol"""
     # create com directories if not present
     com.ensure_com_directories()
