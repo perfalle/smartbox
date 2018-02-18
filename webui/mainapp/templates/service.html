@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="../static/main.css">
 <h1>Service <b>{{ service.service_name }}</b></h1>
 <div class="{{ service.state }}">
-{% if not service.state == 'started' %}
+{% if not service.state == 'running' %}
   <div><a href="/start/{{ service.url_service_name }}">Start now</a></div>
 {% else %}
   <div><a href="/stop/{{ service.url_service_name }}">Stop now</a></div>

@@ -9,8 +9,7 @@ import dbus
 import apiservice
 import systemd_services
 import templates
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+import inotify.adapters
 import sys
 sys.path.append('..')
 from common import com, utils
@@ -132,7 +131,7 @@ def get_service_status(service_name, service_config):
         elif restart_required:
             status['state'] = 'restarting'
         else:
-            status['state'] = 'started'
+            status['state'] = 'running'
     elif not img_available and not running:
         if not settings_errors:
             status['state'] = 'fetching'
@@ -174,19 +173,15 @@ def update_services():
             stop_service(service_name)
 
 
-class ComEventHandler(FileSystemEventHandler):
-    """Event handler class to recieve file modified events from watchdog observer"""
-
-    def on_modified(self, event):
-        try:
-            com.ensure_com_directories()
-            print(event.event_type, event.src_path)
-            update_services()
-        except dbus.exceptions.DBusException as exception:
-            # occurs sometimes at dbus calls TODO: do some investigations here
-            print('dbus exception', exception)
-        except Exception as exception:
-            raise exception
+def on_com_changed(event):
+    try:
+        com.ensure_com_directories()
+        update_services()
+    except dbus.exceptions.DBusException as exception:
+        # occurs sometimes at dbus calls TODO: do some investigations here
+        print('dbus exception', exception)
+    except Exception as exception:
+        raise exception
 
 
 def main():
@@ -208,19 +203,25 @@ def main():
     restart_webui()
 
     # listen to com events
-    directory_observer = Observer()
-    directory_observer.schedule(
-        ComEventHandler(), path=com.WEBUI_PATH, recursive=True)
-    directory_observer.start()
-
-    #TODO: run update_services on systemd events, too
-
+    inotifyer = inotify.adapters.Inotify()
+    inotifyer.add_watch(com.WEBUI_PATH)
+    inotifyer.add_watch(com.SERVICE_CONFIGS_PATH)
+    inotifyer.add_watch(com.IMAGEIDS_PATH)
+    inotifyer.add_watch(com.UUIDS_PATH)
     try:
-        while True:
-            time.sleep(2)
-    except KeyboardInterrupt:
-        directory_observer.stop()
-    directory_observer.join()
+        for event in inotifyer.event_gen():
+            if event is not None:
+                (header, type_names, watch_path, filename) = event
+                if 'IN_CLOSE_WRITE' in type_names or 'IN_DELETE' in type_names:
+                    print(filename, type_names)
+                    if filename:
+                        print((header, type_names, watch_path, filename))
+                        on_com_changed(None)
+    finally:
+        inotifyer.remove_watch(com.WEBUI_PATH)
+        inotifyer.add_watch(com.SERVICE_CONFIGS_PATH)
+        inotifyer.add_watch(com.IMAGEIDS_PATH)
+        inotifyer.add_watch(com.UUIDS_PATH)
 
 
 if __name__ == "__main__":
