@@ -200,6 +200,12 @@ def write_service_status(service_name, service_status):
 
 #region remove
 
+def rm_service_config(service_name):
+    """Removes config file of the service"""
+    service_config_path = get_service_config_path(service_name)
+    if os.path.isfile(service_config_path):
+        os.remove(service_config_path)
+    
 
 def rm_uuid_file(service_name):
     """Removes the uuid file of the service"""
@@ -233,9 +239,13 @@ def rm_reverse_proxy_site(service_name):
 #region convenience
 
 
-def set_running(service_name, running_desired):
-    pass
+def set_running(service_name, running):
+    service_config = read_service_config(service_name)
+    service_config['running'] = running
+    write_service_config(service_name, service_config)
 
 
-def set_ports(service_name, running_desired):
-    pass
+def set_ports(service_name, ports):
+    service_config = read_service_config(service_name)
+    service_config['ports'] = ports
+    write_service_config(service_name, service_config)

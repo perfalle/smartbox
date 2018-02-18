@@ -69,7 +69,7 @@ def handle_uploaded_file(f):
 
 def remove(request):
     service_name = str(request.path)[len('/remove/'):]
-    com.remove_service_config(service_name)
+    com.rm_service_config(service_name)
     return redirect('/show')
 
 
@@ -77,7 +77,7 @@ def get_service_context(service_name, service_config, service_status):
     service_context = dict()
     service_context['service_name'] = service_name
     service_context['state'] = service_status.get('state',
-                                                   'noimage') or 'noimage'
+                                                  'noimage') or 'noimage'
     service_context['url_service_name'] = urllib.parse.quote(
         service_name)  # -> urllib.parse.unquote
     service_context['active_status'] = service_status.get('ActiveState',
@@ -104,7 +104,8 @@ def service(request):
     service_status = com.read_service_status(service_name)
     service_config = com.read_service_config(service_name)
 
-    service_context = get_service_context(service_name, service_config, service_status)
+    service_context = get_service_context(service_name, service_config,
+                                          service_status)
     context = dict()
     context['service'] = service_context
 
