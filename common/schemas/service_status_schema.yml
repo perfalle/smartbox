@@ -9,7 +9,7 @@
       "additionalProperties": false,
       "patternProperties":
       {
-        "^.*$": { "type": "string" }
+        "^.*$": { "anyOf": [{"type": "integer"}, {"type": "null"}] }
       }
     },
     "mountpoints":
@@ -22,6 +22,6 @@
       }
     },
     "errors": { "type": "object" },
-    "state": {type: "string", "enum": ["noimage", "fetching", "starting", "running", "stopping", "stopped"]}
+    "state": {"type": "string", "enum": ["noimage", "fetching", "starting", "running", "restarting", "stopping", "stopped"]}
   }
 }
