@@ -6,17 +6,14 @@ vagrant plugin install vagrant-scp
 vagrant up --provider virtualbox
 vagrant provision
 
-mkdir -p ansible
+mkdir -p ../install/images
 
 # get flightcontrol
 #vagrant ssh -c "sudo sha256sum /root/flightcontrol.aci"
-vagrant scp smartboxbuild:/root/flightcontrol.aci ansible/flightcontrol.aci
+vagrant scp smartboxbuild:/root/flightcontrol.aci ../install/images/flightcontrol.aci
 #sha256sum smartbox/flightcontrol.aci
 
 # get webui
 #vagrant ssh -c "sudo sha256sum /root/webui.aci"
-vagrant scp smartboxbuild:/root/webui.aci ansible/webui.aci
+vagrant scp smartboxbuild:/root/webui.aci ../install/images/webui.aci
 #sha256sum smartbox/webui.aci
-
-# copy install resources
-./update_install_resources.sh

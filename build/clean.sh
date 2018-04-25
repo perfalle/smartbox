@@ -1,4 +1,4 @@
 #!/bin/bash
 
 rm -r .vagrant
-rm -r ./ansible
+rm -r ../install/images
