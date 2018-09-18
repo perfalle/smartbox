@@ -5,8 +5,8 @@ set -e
 ./acbuild --debug set-name flightcontrol
 ./acbuild --debug run -- apt-get update
 ./acbuild --debug run -- apt-get upgrade --yes
-./acbuild --debug run -- apt-get install --yes python3.4 python3-pip  python3-yaml  libyaml-dev
-./acbuild --debug run -- pip3 install inotify grpcio Jinja2
+./acbuild --debug run -- apt-get install --yes python3.4 python3-pip  python3-yaml libyaml-dev python3-protorpc-standalone
+./acbuild --debug run -- pip3 install inotify grpcio Jinja2 google-cloud-storage
 ./acbuild --debug run -- pip3 install jsonschema
 ./acbuild --debug run -- mkdir -p /var/smartbox/com
 ./acbuild --debug mount add com /var/smartbox/com
