@@ -17,6 +17,12 @@
     become: yes
     script: install_rkt_debian.sh
     when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+  - name: Install libnss-mdns for zeroconf/mDNS hostname
+    become: yes
+    package:
+      name: libnss-mdns
+      state: present
   
   - name: Create flightcontrol directory
     become: yes
